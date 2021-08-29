@@ -48,6 +48,6 @@ public class Master {
     public void processInput(String input, Socket socket) throws IOException {
         OutputStream output = socket.getOutputStream();
         PrintWriter writer = new PrintWriter(output, true);
-        writer.println(new Date().toString() + ": " + input);
+        writer.println(new Date() + ": " + input);
     }
 }
