@@ -3,24 +3,27 @@ package paxos;
 public class Server {
     private final Acceptor acceptor;
     private final Proposer proposer;
-    private boolean isLeader = false;
-    private boolean isFollower = false;
+    private volatile boolean isLeader = false;
+    private volatile boolean isFollower = false;
     private final Coordinator coordinator;
     private final float id;
+    private final String name;
+    private volatile String consensusVal;
 
-    public Server(Coordinator coordinator) {
+    public Server(Coordinator coordinator, String name) {
         this.coordinator = coordinator;
         this.id = coordinator.register(this);
+        this.name = name;
         acceptor = new Acceptor(coordinator, this);
         proposer = new Proposer(coordinator, this);
-        init();
+        propose();
     }
 
     public Proposal accept(Proposal proposal) {
         return acceptor.receive(proposal);
     }
 
-    private void init() {
+    private void propose() {
         if(!isLeader && !isFollower) {
             System.out.println("neither a leader nor a follower so start proposing");
             proposer.propose(acceptor.getCurrentVersion() + 1 + id);
@@ -29,5 +32,13 @@ public class Server {
 
     public float getId() {
         return id;
+    }
+
+    public void setConsensusVal(String consensusVal) {
+        this.consensusVal = consensusVal;
+    }
+
+    public String getName() {
+        return name;
     }
 }

@@ -22,7 +22,10 @@ public class Proposer {
             }
         });
         if(versionConsensusCount.size() > coordinator.servers.size()/2) {
-            System.out.println("server " + server.getId() + " reached consensus on version " + currentVersion + " and will move to next stage");
+            System.out.println("server " + server.getName() + ":" + server.getId() + " reached consensus on version " + currentVersion + " and will move to next stage");
+            coordinator.getServers().forEach((id, server) -> {
+                server.accept(new Proposal(currentVersion, this.server.getId() + "msg"));
+            });
         }
     }
 }

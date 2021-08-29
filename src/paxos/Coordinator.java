@@ -30,9 +30,9 @@ public class Coordinator {
 
     public static void main(String[] args) {
         Coordinator coordinator = new Coordinator();
-        new Thread(() -> new Server(coordinator)).start();
-        new Thread(() -> new Server(coordinator)).start();
-        new Thread(() -> new Server(coordinator)).start();
+        new Thread(() -> new Server(coordinator, Thread.currentThread().getName())).start();
+        new Thread(() -> new Server(coordinator, Thread.currentThread().getName())).start();
+        new Thread(() -> new Server(coordinator, Thread.currentThread().getName())).start();
 
         while (true) ;
     }
