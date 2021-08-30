@@ -1,7 +1,7 @@
 package paxos;
 
 public class Acceptor {
-    private volatile float currentVersion = 0.0F;
+    private volatile Float currentVersion = 0.0F;
     private final Coordinator coordinator;
     private final Server server;
 
@@ -11,9 +11,10 @@ public class Acceptor {
     }
 
     public synchronized Proposal receive(Proposal proposal) {
-        if(proposal.getMsg() != null) {
+        if (proposal.getMsg() != null) {
             if (proposal.getVersion() >= currentVersion) {
                 System.out.println("server " + server.getName() + ":" + server.getId() + " received final value " + proposal.getMsg());
+                currentVersion = proposal.getVersion();
                 server.setConsensusVal(proposal.getMsg());
                 return proposal;
             } else {

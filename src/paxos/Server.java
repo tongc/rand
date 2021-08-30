@@ -26,7 +26,7 @@ public class Server {
     private void propose() {
         if(!isLeader && !isFollower) {
             System.out.println("neither a leader nor a follower so start proposing");
-            proposer.propose(acceptor.getCurrentVersion() + 1 + id);
+            proposer.propose(acceptor.getCurrentVersion(), id);
         }
     }
 
@@ -40,5 +40,13 @@ public class Server {
 
     public String getName() {
         return name;
+    }
+
+    public Acceptor getAcceptor() {
+        return acceptor;
+    }
+
+    public String getConsensusVal() {
+        return consensusVal;
     }
 }

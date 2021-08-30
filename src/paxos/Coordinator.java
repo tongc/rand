@@ -1,12 +1,17 @@
 package paxos;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class Coordinator {
     //magical global state
-    public final ConcurrentMap<Float, Server> servers = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Float, Server> servers = new ConcurrentHashMap<>();
     private final AtomicInteger nextServerId = new AtomicInteger(1);
 
     public float register(Server server) {
@@ -24,16 +29,39 @@ public class Coordinator {
         }
     }
 
-    public ConcurrentMap<Float, Server> getServers() {
+    public Map<Float, Server> getServers() {
         return servers;
     }
 
-    public static void main(String[] args) {
+    /**
+     * simulate server not reachable
+     */
+    public Map<Float, Server> getRandomServers() {
+        return servers.entrySet().stream()
+                .filter(floatServerEntry -> ThreadLocalRandom.current().nextInt(9) > 3)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    public static void main(String[] args) throws InterruptedException {
         Coordinator coordinator = new Coordinator();
         new Thread(() -> new Server(coordinator, Thread.currentThread().getName())).start();
         new Thread(() -> new Server(coordinator, Thread.currentThread().getName())).start();
         new Thread(() -> new Server(coordinator, Thread.currentThread().getName())).start();
+        new Thread(() -> new Server(coordinator, Thread.currentThread().getName())).start();
+        new Thread(() -> new Server(coordinator, Thread.currentThread().getName())).start();
+        new Thread(() -> new Server(coordinator, Thread.currentThread().getName())).start();
+        new Thread(() -> new Server(coordinator, Thread.currentThread().getName())).start();
+        new Thread(() -> new Server(coordinator, Thread.currentThread().getName())).start();
+        new Thread(() -> new Server(coordinator, Thread.currentThread().getName())).start();
 
+        Thread.sleep(3000);
+        coordinator.getServers().entrySet().forEach(new Consumer<Map.Entry<Float, Server>>() {
+            @Override
+            public void accept(Map.Entry<Float, Server> entry) {
+                System.out.println("server " + entry.getKey() + " has value " + entry.getValue().getConsensusVal());
+                System.out.println("server " + entry.getKey() + " has version " + entry.getValue().getAcceptor().getCurrentVersion());
+            }
+        });
         while (true) ;
     }
 }
