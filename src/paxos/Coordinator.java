@@ -58,8 +58,7 @@ public class Coordinator {
         coordinator.getServers().entrySet().forEach(new Consumer<Map.Entry<Float, Server>>() {
             @Override
             public void accept(Map.Entry<Float, Server> entry) {
-                System.out.println("server " + entry.getKey() + " has value " + entry.getValue().getConsensusVal());
-                System.out.println("server " + entry.getKey() + " has version " + entry.getValue().getAcceptor().getCurrentVersion());
+                System.out.println("server " + entry.getKey() + " has value " + entry.getValue().getConsensusVal() + " has version " + entry.getValue().getAcceptor().getCurrentVersion());
             }
         });
         while (true) ;

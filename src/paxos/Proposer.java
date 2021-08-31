@@ -24,9 +24,9 @@ public class Proposer {
             }
         });
         if(versionConsensusCount.size() > coordinator.getServers().size()/2) {
-            System.out.println("server " + server.getName() + ":" + server.getId() + " reached consensus on version " + newVersion + " and will move to next stage");
+            System.out.println("====================server " + server.getName() + ":" + server.getId() + " reached majority vote on version " + newVersion + " and will move to next stage=========================");
             coordinator.getServers().forEach((id, server) -> {
-                System.out.println("server " + server.getName() + ":" + server.getId() + " send final msg to " + id);
+//                System.out.println("server " + server.getName() + ":" + server.getId() + " send final msg to " + id);
                 server.accept(new Proposal(newVersion, this.server.getId() + "msg"));
             });
         } else {
