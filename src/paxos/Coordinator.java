@@ -54,7 +54,7 @@ public class Coordinator {
         new Thread(() -> new Server(coordinator, Thread.currentThread().getName())).start();
         new Thread(() -> new Server(coordinator, Thread.currentThread().getName())).start();
 
-        Thread.sleep(3000);
+        Thread.sleep(1000);
         coordinator.getServers().entrySet().forEach(new Consumer<Map.Entry<Float, Server>>() {
             @Override
             public void accept(Map.Entry<Float, Server> entry) {

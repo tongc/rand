@@ -19,8 +19,12 @@ public class Server {
         propose();
     }
 
+    public Proposal promise(Float version) {
+        return acceptor.promise(version);
+    }
+
     public Proposal accept(Proposal proposal) {
-        return acceptor.receive(proposal);
+        return acceptor.accept(proposal);
     }
 
     private void propose() {

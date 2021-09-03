@@ -11,6 +11,11 @@ public class Proposal {
         this.msg = msg;
     }
 
+    public Proposal(float version) {
+        this.version = version;
+        this.msg = null;
+    }
+
     public float getVersion() {
         return version;
     }
