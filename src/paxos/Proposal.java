@@ -1,5 +1,9 @@
 package paxos;
 
+import java.util.Objects;
+
+import static paxos.Config.*;
+
 public class Proposal {
     public static final String MSG_PREFIX = "@P";
     private final float version;
@@ -24,13 +28,13 @@ public class Proposal {
     }
 
     public String serialize() {
-        return MSG_PREFIX + "{" + version + "," + msg + "}";
+        return MSG_PREFIX + MSG_START + version + DELIMETER  + msg + MSG_END;
     }
 
     public Proposal deserialize(String msg) {
         if (msg.startsWith(MSG_PREFIX)) {
-            String msgBody = msg.replaceFirst(MSG_PREFIX + "\\{", "").replace("\\}", "");
-            String[] versionMsg = msgBody.split(",");
+            String msgBody = msg.replaceFirst(MSG_PREFIX + "\\" + MSG_START, "").replace(MSG_END, "");
+            String[] versionMsg = msgBody.split(DELIMETER);
             if (versionMsg.length == 1) {
                 return new Proposal(Float.parseFloat(versionMsg[0]));
             } else if (versionMsg.length == 2) {
@@ -39,5 +43,26 @@ public class Proposal {
         }
         System.err.println("invalid input " + msg);
         return null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Proposal proposal = (Proposal) o;
+        return Float.compare(proposal.version, version) == 0 && Objects.equals(msg, proposal.msg);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(version, msg);
+    }
+
+    @Override
+    public String toString() {
+        return "Proposal{" +
+                "version=" + version +
+                ", msg='" + msg + '\'' +
+                '}';
     }
 }

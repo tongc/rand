@@ -9,6 +9,7 @@ class ProposalTest {
     @Test
     fun shouldSerialize() {
         testObject = Proposal(1.1f, "testmsg")
-        assertEquals(Proposal.MSG_PREFIX + "{1.1,testmsg}", testObject!!.serialize());
+        assertEquals(Proposal.MSG_PREFIX + "{1.1,testmsg}", testObject!!.serialize())
+        assertEquals(testObject, testObject!!.deserialize(testObject!!.serialize()));
     }
 }
